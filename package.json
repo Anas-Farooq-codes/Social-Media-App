@@ -13,6 +13,7 @@
     "@ant-design/happy-work-theme": "^1.0.0",
     "@clerk/nextjs": "^4.27.2",
     "@iconify/react": "^4.1.1",
+    "@prisma/client": "^5.7.0",
     "antd": "^5.11.5",
     "classnames": "^2.5.1",
     "next": "14.2.15",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "14.2.15"
+    "eslint-config-next": "14.2.15",
+    "prisma": "^5.7.1"
   }
 }
