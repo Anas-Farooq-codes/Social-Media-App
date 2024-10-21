@@ -16,6 +16,7 @@ model User {
   first_name String?
   last_name String?
   image_url String?
+  banner_id String?
   banner_url String?
   username String? @unique
 }

@@ -1,6 +1,6 @@
 import useWindowDimensions from '@/hooks/useWindowsDimensions'
 import { Drawer } from 'antd'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import css from "@/styles/siderbar.module.css"
 
 const SidebarContainer = ({ 
@@ -10,31 +10,35 @@ const SidebarContainer = ({
     ...other
 }) => {
 
-    const {width}  =  useWindowDimensions()
-    if(width <= 1268)
-    {
+    const { width } = useWindowDimensions();
+    const [mounted, setMounted] = useState(false);
 
-return (
+    useEffect(() => {
+        setMounted(true); // Component is now mounted
+    }, []);
 
-    <Drawer
-    open={isDrawerOpen}
-    placement='left'
-    onClose={() => setIsDrawerOpen(false)}
-    {...other}
-    height={"100%"}
-    className={css.sidebarContainer}
-    >
-        <div className={css.drawerContainer}>
-            {children}
-        </div>
-    </Drawer>
-);
+    if (!mounted) {
+        return null; // Don't render anything during SSR
     }
 
-    else {
-        return (children)
+    if (width <= 1268) {
+        return (
+            <Drawer
+                open={isDrawerOpen}
+                placement='left'
+                onClose={() => setIsDrawerOpen(false)}
+                {...other}
+                height={"100%"}
+                className={css.sidebarContainer}
+            >
+                <div className={css.drawerContainer}>
+                    {children}
+                </div>
+            </Drawer>
+        );
+    } else {
+        return children;
     }
-  
 }
 
-export default SidebarContainer
+export default SidebarContainer;

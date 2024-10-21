@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import css from "@/styles/siderbar.module.css";
 import Box from "./Box/Box";
 import { sidebarRoutes } from "@/lib/sidebarRoutes";
@@ -16,6 +16,11 @@ const Sidebar = () => {
   const router = useRouter();
   const { signOut } = useClerk();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  },[])
 
   const {
     settings: { isSidebarOpen },
@@ -37,8 +42,7 @@ const Sidebar = () => {
   const activeColor = (route) => {
     return isActive(route) && "var(--primary)";
   };
-  return (
-    <SidebarContainer
+  return mounted && <SidebarContainer
     isDrawerOpen = {isSidebarOpen}
     setIsDrawerOpen = {handleDrawerClose}>
       <div className={css.wrapper}>
@@ -92,7 +96,6 @@ const Sidebar = () => {
         </Box>
       </div>
     </SidebarContainer>
-  );
 };
 
 export default Sidebar;
