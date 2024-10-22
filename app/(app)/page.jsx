@@ -1,11 +1,15 @@
-
-import { useSettingsContext } from '@/context/settings/settings-context'
 import React from 'react'
+import HomeView from '@/sections/HomeView';
+export const metadata = () => {
+  return {
+    title: "Connectify",
+    description: "New way to feel freedom",
+  };
+};
 
 const MainPage = () => {
 
-  return  <>Main Page
-  </>;
+  return  <HomeView></HomeView>
 };
 
 export default MainPage
