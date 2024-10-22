@@ -3,6 +3,7 @@ import "@/styles/typography.css";
 import { Public_Sans } from 'next/font/google'
 import StyledComponentsRegistry from '@/lib/AntRegistry'
 import { ClerkProvider } from '@clerk/nextjs'
+import QueryProvider from '@/lib/QueryProvider';
 
 const publicSans = Public_Sans({
 
@@ -37,10 +38,14 @@ export default function RootLayout({ children }) {
       }}>
     <html lang="en">
       <body className={publicSans.className}>
+        <QueryProvider>
+          
         <StyledComponentsRegistry>
 
         {children}
         </StyledComponentsRegistry>
+          </QueryProvider>
+
         </body>
     </html>
     </ClerkProvider>
