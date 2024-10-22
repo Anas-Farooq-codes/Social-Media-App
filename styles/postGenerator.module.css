@@ -1,0 +1,54 @@
+.postWrapper {
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+}
+
+.container {
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    padding: 1.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.bottom {
+    width: 100%;
+}
+
+.previewContainer {
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.preview {
+    width: 100%;
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+    -moz-border-radius: .5rem;
+    -ms-border-radius: .5rem;
+    -o-border-radius: .5rem;
+    object-fit: cover;
+}
+
+.bottom{
+    width: 100%;
+}
+
+.remove {
+z-index: 2;
+right: 1rem;
+top: 1rem;
+
+}
