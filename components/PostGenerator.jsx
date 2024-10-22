@@ -2,21 +2,40 @@
 import React, { useState } from 'react'
 import css from "@/styles/postGenerator.module.css"
 import Box from './Box/Box'
-import { Avatar, Button, Flex, Input, Typography } from 'antd'
+import { Avatar, Button, Flex, Input, Spin, Typography } from 'antd'
 import { useUser } from '@clerk/nextjs'
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createPost } from '@/actions/post';
 
 const PostGenerator = () => {
 
     const {user} = useUser()
-    const {postText, setPostText} = useState("")
+    const [postText, setPostText] = useState("")
     const imgInputRef = React.useRef(null);
     const videoInputRef = React.useRef(null);
 const [fileType, setFileType] = useState(null)
-const [selectedFile, setSelectedFile] = useState(null)
+const [selectedFile, setSelectedFile] = useState(null);
+const queryClient = useQueryClient()
 
+const {mutate: execute , isPending} = useMutation({
+    mutationFn: (data) => createPost(data),
+    onSuccess: () => {
+        handleSuccess();
+        queryClient.invalidateQueries("posts")
+    },
+onError: () => showError("Something went wrong. Try Again!")
+})
 
+const handleSuccess = () => {
+    setSelectedFile(null)
+    setFileType(null)
+    setPostText("")
+    toast.success("Post created successfully")
+
+}
 
 
 const handleFileChange = (e) => {
@@ -45,8 +64,26 @@ const handleRemoveFile = () => {
     setFileType(null);
 }
 
+const showError = (msg = "Something went wrong! Try again") => {
+    toast.error(msg)
+}
+
+const submitPost = () => {
+    if ((postText === "" || !postText) && !selectedFile)
+    {
+       showError("Post content or media is required!")
+       return;
+    }
+
+    execute({postText, media: selectedFile})
+}
   return (
     <>
+    <Spin spinning={isPending} tip={
+        <Typography className='typoBody1' style={{ marginTop: "1rem"}}>
+            Uploading Post...
+        </Typography>
+    }>
     <div className={css.postGenWrapper}>
         <Box className={css.container}>
 
@@ -166,6 +203,7 @@ justify='space-between'
     <Button
     type='primary'
     style={{marginLeft: "auto"}}
+    onClick={submitPost}
     >
         <Flex
         align='center'
@@ -186,6 +224,7 @@ justify='space-between'
 
         </Box>
     </div>
+    </Spin>
 
     {/* Button to accept the images files  */}
 
