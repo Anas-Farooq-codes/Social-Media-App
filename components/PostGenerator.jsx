@@ -2,10 +2,9 @@
 import React, { useState } from 'react'
 import css from "@/styles/postGenerator.module.css"
 import Box from './Box/Box'
-import { Avatar, Button, Flex, Input, Spin, Typography } from 'antd'
+import { Avatar, Button, Flex, Image, Input, Spin, Typography } from 'antd'
 import { useUser } from '@clerk/nextjs'
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '@/actions/post';
@@ -97,8 +96,6 @@ const submitPost = () => {
 <Avatar
 src={user?.imageUrl}
 style={{
-    width: "2.6rem",
-    height: "2.6rem",
     boxShadow: "var(--avatar-shadow)"
 }}
 />
@@ -125,7 +122,7 @@ onChange ={(e) => setPostText(e.target.value)}
             </Button>
             {
                 fileType === "image" && (
-                    <img
+                    <Image
                         src={selectedFile}
                         className={css.preview}
                         alt="preview of post"

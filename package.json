@@ -19,10 +19,12 @@
     "antd": "^5.11.5",
     "classnames": "^2.5.1",
     "cloudinary": "^1.41.0",
+    "dayjs": "^1.11.13",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.5.3",
     "svix": "^1.15.0"
   },
   "devDependencies": {

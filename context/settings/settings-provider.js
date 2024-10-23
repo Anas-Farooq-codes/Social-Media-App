@@ -5,7 +5,7 @@ import {  SettingsContext } from "./settings-context";
 export function SettingsContextProvider({ children }) {
   const [settings, setSettings] = useState({
     theme: "light",
-    isSidebarOpen: true,
+    isSidebarOpen: false,
   });
 
   return (
