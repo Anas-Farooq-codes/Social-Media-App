@@ -4,8 +4,9 @@ import Box from './Box/Box'
 import { Avatar, Flex, Image, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { getFileTypeFromUrl } from '@/utils'
+import LikeButton from './LikeButton'
 
-const Post = ({data}) => {
+const Post = ({data, queryId}) => {
   return (
     <div className={css.wrapper}>
         <Box>
@@ -74,6 +75,15 @@ strong>
               />
             </div>
           )}
+
+          {/* Actions  */}
+
+          <Flex>
+            <LikeButton
+            postId={data?.id}
+            likes={data?.likes}
+            queryId={queryId}/>
+          </Flex>
 
             </div>
         </Box>
