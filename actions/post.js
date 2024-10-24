@@ -50,7 +50,11 @@ try {
         include: {
             author: true,
             likes: true,
-            comments: true
+            comments: {
+                include: {
+                    author: true
+                }
+            }
         },
         take,
         ...(lastCursor && {
@@ -187,3 +191,34 @@ export const updatePostLike = async (postId, type) => {
       throw Error("Failed to update post like");
     }
   };
+
+  export const addComment = async(postId, comment) => {
+    try {
+        const {id: userId} = await currentUser();
+        const newComment = await db.comment.create({
+            data: {
+                comment,
+                post: {
+                    connect: {
+                        id: postId 
+                    }
+                },
+                author: {
+                    connect: {
+                        id: userId
+                    }
+                }
+            }
+        })
+        console.log("comment created", newComment);
+        return {
+            data: newComment
+        }
+        
+    } catch (e) {
+        console.log(e);
+        throw new Error("Failed to add comment");
+        
+        
+    }
+  } 

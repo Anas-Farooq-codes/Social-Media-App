@@ -5,6 +5,8 @@ import { Avatar, Flex, Image, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { getFileTypeFromUrl } from '@/utils'
 import LikeButton from './LikeButton'
+import CommentButton from './CommentButton'
+import CommentSection from './CommentSection'
 
 const Post = ({data, queryId}) => {
   return (
@@ -83,7 +85,18 @@ strong>
             postId={data?.id}
             likes={data?.likes}
             queryId={queryId}/>
+
+            <CommentButton comments={data?.comments?.length}/>
           </Flex>
+
+          {/* Comment Section  */}
+
+          <CommentSection
+          comments={data?.comments}
+          expanded={false}
+          postId={data?.id}
+          queryId={queryId}
+          />
 
             </div>
         </Box>
