@@ -35,3 +35,25 @@ body{
 
 box-shadow: none;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(203, 203, 203, 0.831);
+  border-radius: 99px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(152, 152, 152, 0.804);
+}
