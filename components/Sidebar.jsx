@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Typography } from "antd";
 import { Icon } from "@iconify/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import cx from "classnames";
 import { useSettingsContext } from "@/context/settings/settings-context";
 import SidebarContainer from "./SidebarContainer";
@@ -17,6 +17,7 @@ const Sidebar = () => {
   const { signOut } = useClerk();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false)
+  const {user} = useUser();
 
   useEffect(() => {
     setMounted(true)
