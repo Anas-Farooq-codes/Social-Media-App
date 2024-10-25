@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Typography } from "antd";
 import { Icon } from "@iconify/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useClerk, useUser } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import cx from "classnames";
 import { useSettingsContext } from "@/context/settings/settings-context";
 import SidebarContainer from "./SidebarContainer";
@@ -17,8 +17,6 @@ const Sidebar = () => {
   const { signOut } = useClerk();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false)
-
-  const {user} = useUser()
 
   useEffect(() => {
     setMounted(true)
@@ -49,10 +47,10 @@ const Sidebar = () => {
     setIsDrawerOpen = {handleDrawerClose}>
       <div className={css.wrapper}>
         <Box className={css.container}>
-          {sidebarRoutes(user).map((route, index) => (
+          {sidebarRoutes().map((route, index) => (
             <Link
               key={index}
-              href={route.route === `/profile/${user?.id}` ? `${route.route}?person=${user?.firstName}` : `${route.route}`}
+              href={route.route}
               className={cx(css.item, isActive(route))}
             >
               {/* Icon  */}
