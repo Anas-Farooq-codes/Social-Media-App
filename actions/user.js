@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
+import { deleteFile, uploadFile } from "./uploadFile";
 
 export const createUser = async (user) => {
 
@@ -71,24 +72,6 @@ error: "Failed to update in db"
     
 }
 
-export const deleteUser = async (id) => { 
-    try{
-    await db.user.delete({
-        where: {
-            id,
-        },
-    })
-
-    console.log("User is deleted from the db");
-    
-} catch(e)
-{
-console.log(e);
-return {
-    error: "Failed to delete in db"
-}
-}
-}
 
 
 export const getUser = async (id) => {
@@ -109,7 +92,7 @@ export const getUser = async (id) => {
             }
         });
 
-        return user;
+        return {data:user};
     } catch (e) {
         console.error(e);
         return {
@@ -117,3 +100,57 @@ export const getUser = async (id) => {
         };
     }
 };
+
+
+export const deleteUser = async (id) => { 
+    try{
+    await db.user.delete({
+        where: {
+            id,
+        },
+    })
+
+    console.log("User is deleted from the db");
+    
+} catch(e)
+{
+console.log(e);
+return {
+    error: "Failed to delete in db"
+}
+}
+}
+
+
+export const updateBanner = async (params) => {
+    const { id, banner, prevBannerId } = params;
+    try {
+      let banner_id;
+      let banner_url;
+  
+      if (banner) {
+        const res = await uploadFile(banner, `/users/${id}`);
+        const { public_id, secure_url } = res;
+        banner_id = public_id;
+        banner_url = secure_url;
+  
+        // Delete previous banner
+        if (prevBannerId) {
+          await deleteFile(prevBannerId);
+        }
+      }
+      await db.user.update({
+        where: {
+          id,
+        },
+        data: {
+          banner_url,
+          banner_id,
+        },
+      });
+      console.log("user banner updated");
+    } catch (e) {
+      console.log("Error updating user banner");
+      throw e;
+    }
+  };

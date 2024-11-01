@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Typography } from "antd";
 import { Icon } from "@iconify/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import cx from "classnames";
 import { useSettingsContext } from "@/context/settings/settings-context";
 import SidebarContainer from "./SidebarContainer";
@@ -49,12 +49,18 @@ const Sidebar = () => {
     setIsDrawerOpen = {handleDrawerClose}>
       <div className={css.wrapper}>
         <Box className={css.container}>
-          {sidebarRoutes(user).map((route, index) => (
-            <Link
-              key={index}
-              href={route.route === `/profile/${user?.id}` ? `${route.route}?person=${user?.firstName}` : `${route.route}`}
-              className={cx(css.item, isActive(route))}
-            >
+        {sidebarRoutes(user).map((route, index) => (
+               <Link
+               // if the route is profile, then add the person query
+               href={
+                 route.route === `/profile/${user?.id}`
+                   ? `${route.route}?person=${user?.firstName}`
+                   : `${route.route}`
+               }
+               key={index}
+               className={cx(css.item, isActive(route))}
+             >
+
               {/* Icon  */}
 
               <Typography
