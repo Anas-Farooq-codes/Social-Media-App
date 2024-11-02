@@ -24,6 +24,8 @@ model User {
   posts         Post[]
   Like          Like[]
   Comment       Comment[]
+    followers     Follow[]  @relation("Following")
+    following     Follow[]  @relation("Follower")
 }
 
 model Post {
@@ -63,4 +65,13 @@ model Trend {
   name   String
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
+}
+
+model Follow {
+    id          Int      @id @default(autoincrement())
+    follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+    followerId  String
+    following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+    followingId String
+    createdAt   DateTime @default(now())
 }

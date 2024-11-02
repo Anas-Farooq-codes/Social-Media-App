@@ -19,8 +19,8 @@ const AuthLayout = ({children}) => {
 <Image
 alt='Authentication'
 src="/images/auth.png"
-width={400}
-height={480}
+width={680}
+height={780}
 quality={100}/>
 </div>
         </div>

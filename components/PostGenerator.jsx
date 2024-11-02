@@ -90,25 +90,25 @@ const PostGenerator = () => {
             <Flex vertical gap={"1rem"} align="flex-start">
               {/* Generate Post  */}
 
-              <Flex style={{ width: "100%" }} gap={"1rem"}>
-                <img
-                  src={user?.imageUrl}
-                  alt="User Avatar"
-                  style={{
-                    width: "4rem",
-                    height: "4rem", 
-                    borderRadius: "50%",
-                    boxShadow: "var(--avatar-shadow)",
-                    objectFit: "cover",
-                  }}
-                />
-                <Input.TextArea
-                  placeholder="Share what you are thinking..."
-                  style={{ height: 80, resize: "none", Flex: 1 }}
-                  value={postText}
-                  onChange={(e) => setPostText(e.target.value)}
-                />
-              </Flex>
+              <Flex style={{ width: "100%", alignItems: "center" }} gap={"1rem"}>
+  <img
+    src={user?.imageUrl}
+    alt="User Avatar"
+    style={{
+      width: "6rem",
+      height: "6rem", 
+      borderRadius: "50%",
+      boxShadow: "var(--avatar-shadow)",
+      objectFit: "cover",
+    }}
+  />
+  <Input.TextArea
+    placeholder="Share what you are thinking..."
+    style={{ height: 80, resize: "none", flex: 1 }} // Corrected "Flex" to "flex"
+    value={postText}
+    onChange={(e) => setPostText(e.target.value)}
+  />
+</Flex>
 
               {fileType && (
                 <div className={css.previewContainer}>
