@@ -1,62 +1,68 @@
-import React from 'react'
-import css from "@/styles/post.module.css"
-import Box from './Box/Box'
-import { Avatar, Flex, Image, Typography } from 'antd'
-import dayjs from 'dayjs'
-import { getFileTypeFromUrl } from '@/utils'
-import LikeButton from './LikeButton'
-import CommentButton from './CommentButton'
-import CommentSection from './CommentSection'
+import React from "react";
+import css from "@/styles/post.module.css";
+import Box from "./Box/Box";
+import { Avatar, Flex, Image, Typography } from "antd";
+import dayjs from "dayjs";
+import { getFileTypeFromUrl } from "@/utils";
+import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
+import CommentSection from "./CommentSection";
+import Link from "next/link";
 
-const Post = ({data, queryId}) => {
+const Post = ({ data, queryId }) => {
   return (
     <div className={css.wrapper}>
-        <Box>
-            <div className={css.container}>
+      <Box>
+        <div className={css.container}>
+          {/* Profile Info  */}
 
-                {/* Profile Info  */}
+          <Flex align="center" justify="space-between">
+            {/* Left Side  */}
 
-<Flex align='center' justify='space-between'>
+            <Flex gap={".5rem"} align="center">
+              <Link
+                href={`/profile/${data?.author?.id}?person=${data?.author?.first_name}`}
+                passHref
+              >
+                <Avatar size={40} src={data?.author?.image_url} />
+              </Link>
 
-    {/* Left Side  */}
+              {/* name and post data  */}
 
-    <Flex gap={".5rem"} align='center'>
-        <Avatar size={40} src={data?.author?.image_url}/>
+              <Flex vertical>
+                <Link
+                  href={`/profile/${data?.author?.id}?person=${data?.author?.first_name}`}
+                  passHref
+                >
+                  <Typography className="typoSubtitle2">
+                    {data?.author?.first_name} {data?.author?.last_name}
+                  </Typography>
+                </Link>
 
-        {/* name and post data  */}
+                <Typography.Text
+                  className="typoCaption"
+                  type="secondary"
+                  strong
+                >
+                  {dayjs(data?.created_at).format("DD MM YYYY")}
+                </Typography.Text>
+              </Flex>
+            </Flex>
+          </Flex>
 
-<Flex vertical>
+          {/* Caption  */}
 
-<Typography className='typoSubtitle2'>
-    {data?.author?.first_name} {data?.author?.last_name}
-</Typography>
+          <Typography.Text>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data?.postText?.replace(/\n/g, "<br/>"),
+              }}
+            />
+          </Typography.Text>
 
-<Typography.Text
-className='typoCaption'
-type='secondary'
-strong>
-    {dayjs(data?.created_at).format("DD MM YYYY")}
-</Typography.Text>
-</Flex>
+          {/* Post Media  */}
 
-    </Flex>
-
-</Flex>
-
-{/* Caption  */}
-
-<Typography.Text>
-    <div
-        dangerouslySetInnerHTML={{
-            __html: data?.postText?.replace(/\n/g, "<br/>")
-        }}
-    />
-</Typography.Text>
-
-
-{/* Post Media  */}
-
-{getFileTypeFromUrl(data?.media) === "image" && (
+          {getFileTypeFromUrl(data?.media) === "image" && (
             <div className={css.media}>
               <Image
                 preview={{ mask: null }}
@@ -68,7 +74,7 @@ strong>
             </div>
           )}
 
-{getFileTypeFromUrl(data?.media) === "video" && (
+          {getFileTypeFromUrl(data?.media) === "video" && (
             <div className={css.media}>
               <video
                 src={data?.media}
@@ -82,26 +88,26 @@ strong>
 
           <Flex>
             <LikeButton
-            postId={data?.id}
-            likes={data?.likes}
-            queryId={queryId}/>
+              postId={data?.id}
+              likes={data?.likes}
+              queryId={queryId}
+            />
 
-            <CommentButton comments={data?.comments?.length}/>
+            <CommentButton comments={data?.comments?.length} />
           </Flex>
 
           {/* Comment Section  */}
 
           <CommentSection
-          comments={data?.comments}
-          expanded={false}
-          postId={data?.id}
-          queryId={queryId}
+            comments={data?.comments}
+            expanded={false}
+            postId={data?.id}
+            queryId={queryId}
           />
-
-            </div>
-        </Box>
+        </div>
+      </Box>
     </div>
-  )
-}
+  );
+};
 
-export default Post
+export default Post;

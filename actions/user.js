@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db"
 import { deleteFile, uploadFile } from "./uploadFile";
+import { currentUser } from "@clerk/nextjs";
 
 export const createUser = async (user) => {
 
@@ -177,6 +178,74 @@ export const updateBanner = async (params) => {
         followers,
         following,
       };
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+  
+
+  export const getFollowSuggestions = async () => {
+    try {
+      const loggedInUser = await currentUser();
+
+      const following = await db.follow.findMany({
+        where: {
+          followerId: loggedInUser?.id,
+        },
+      });
+  
+    
+      const followingIds = following.map((follow) => follow.followingId);
+  
+      // Fetch all users that the given user is not already following
+
+      const suggestions = await db.user.findMany({
+        where: {
+          AND: [
+            { id: { not: loggedInUser?.id } }, 
+            { id: { notIn: followingIds } }, 
+          ],
+        },
+      });
+  
+      return suggestions;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  export const updateFollow = async (params) => {
+    const { id, type } = params;
+    // type = follow or unfollow, id is target user id
+    try {
+      const loggedInUser = await currentUser();
+      if (type === "follow") {
+        await db.follow.create({
+          data: {
+            follower: {
+              connect: {
+                id: loggedInUser.id,
+              },
+            },
+            following: {
+              connect: {
+                id,
+              },
+            },
+          },
+        });
+        console.log("User followed");
+      } else if (type === "unfollow") {
+        await db.follow.deleteMany({
+          where: {
+            followerId: loggedInUser.id,
+            followingId: id,
+          },
+        });
+        console.log("User unfollowed");
+      }
     } catch (e) {
       console.log(e);
       throw e;

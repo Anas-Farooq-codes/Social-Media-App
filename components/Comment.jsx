@@ -5,6 +5,7 @@ import React, { useContext } from 'react'
 import Box from './Box/Box'
 import css from "@/styles/post.module.css"
 import cx from "classnames"
+import Link from 'next/link'
 
 const Comment = ({data}) => {
     const {settings: {theme}} = useContext(SettingsContext)
@@ -12,10 +13,14 @@ const Comment = ({data}) => {
     <Box>
         <Flex gap={".5rem"}>
         {/* Avatar of User  */}
-
+        <Link
+                href={`/profile/${data?.author?.id}?person=${data?.author?.first_name}`}
+                passHref
+              >
         <Avatar
         size={30} src={data?.author?.image_url}
         />
+        </Link>
 
         {/* person Component  */}
 
@@ -25,10 +30,14 @@ const Comment = ({data}) => {
 
 <Flex align='center' justify='space-between'>
     {/* Name  */}
-
+    <Link
+                href={`/profile/${data?.author?.id}?person=${data?.author?.first_name}`}
+                passHref
+              >
     <Typography.Text>
         {data?.author?.first_name} {data?.author?.last_name}
     </Typography.Text>
+    </Link>
 
     {/* Data  */}
 

@@ -4,6 +4,8 @@ import FollowInfoBox from '@/components/FollowInfoBox'
 import PostGenerator from '@/components/PostGenerator'
 import { useUser } from '@clerk/nextjs'
 import Posts from '@/components/Posts'
+import FollowSuggestions from '@/components/FollowSuggestions'
+import FollowButton from '@/components/FollowButton'
 
 const ProfileBody = ({userId}) => {
     const { user: currentUser } = useUser();
@@ -13,7 +15,9 @@ const ProfileBody = ({userId}) => {
     <div className={css.profileBody}>
         <div className={css.left}>
             <div className={css.sticky}>
+            {!isCurrentUser && <FollowButton id={userId} />}
 <FollowInfoBox id={userId}/>
+<FollowSuggestions/>
             </div>
         </div>
 
