@@ -5,6 +5,7 @@ import css from "@/styles/profileView.module.css"
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import ProfileBody from './ProfileBody'
+import FollowPersonsBody from '@/components/FollowPersonsBody'
 
 const ProfileView = ({userId}) => {
     const {data, isLoading, isError} = useQuery({

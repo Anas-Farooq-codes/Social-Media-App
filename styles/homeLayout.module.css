@@ -12,9 +12,21 @@
     display: flex;
     gap: 1rem;
 padding: 1rem;
+
 flex-grow: 1;
 }
 
 .page_body {
     flex: 1;
+}
+
+@media only screen and (max-width: 400px) {
+
+.container{
+
+    padding-left: 0; 
+        padding-right: 0; 
+        padding-top: 1rem;
+        padding-bottom: 1rem; 
+}
 }
