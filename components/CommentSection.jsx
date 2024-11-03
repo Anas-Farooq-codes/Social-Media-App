@@ -1,12 +1,27 @@
 import { Icon } from '@iconify/react'
 import { Button, Flex } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import css from "@/styles/commentSection.module.css"
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CommentInput from './CommentInput'
 import Comment from './Comment'
+import { animateScroll } from 'react-scroll'
 
 const CommentSection = ({comments, postId, queryId}) => {
     const [expanded, setExpanded] = React.useState(false)
+    const [parent] = useAutoAnimate();
+
+    useEffect(() => {
+        if(expanded) {
+        //   Scroll to bottom of parent 
+        
+        animateScroll.scrollToBottom({
+            containerId: "comments-container",
+            smooth: true,
+            duration: 300,
+        })
+        }
+    })
   return (
 
     <Flex vertical gap={"1rem"}>
@@ -27,7 +42,10 @@ const CommentSection = ({comments, postId, queryId}) => {
 
 {
     comments?.length > 0 && (
-        <Flex vertical gap={".5rem"} className={css.commentsContainer}>
+        <Flex
+        ref={parent}
+        id='comments-container'
+         vertical gap={".5rem"} className={css.commentsContainer}>
 {!expanded ? (
     <Comment
     data = {comments[comments.length - 1]}

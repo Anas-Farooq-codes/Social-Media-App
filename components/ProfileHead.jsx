@@ -19,7 +19,7 @@ const TABS = [
     icon: "ph:heart-fill",
   },
   {
-    label: "Followings",
+    label: "Following",
     icon: "fluent:people-20-filled",
   },
 ];

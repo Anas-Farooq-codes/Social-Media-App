@@ -1,5 +1,5 @@
 "use client"
-import { getMyFeedPosts } from '@/actions/post'
+import { getMyFeedPosts, getPosts } from '@/actions/post'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { Flex, Spin, Typography } from 'antd'
 import React, { useEffect } from 'react'
@@ -17,7 +17,8 @@ const Posts = ({ id = "all"}) => {
     }
     const {data, isLoading, isError, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage, isFetching} = useInfiniteQuery({
         queryKey: ["posts", id],
-        queryFn: ({pageParam = ""}) => getMyFeedPosts(pageParam),
+        queryFn: ({pageParam = ""}) =>
+            id === "all" ? getMyFeedPosts(pageParam) : getPosts(pageParam, id),
         getNextPageParam: (lastPage) => {
         return lastPage?.metadata?.lastCursor
         }
