@@ -1,8 +1,8 @@
 .wrapper {
-
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    flex-direction: row;
 }
 
 .postsArea {
@@ -26,3 +26,15 @@ overflow-y: auto;
     max-width: 25rem;
 
 }
+
+@media (max-width: 768px) {
+    .wrapper {
+        flex-direction: column; 
+    }
+
+    .right {
+        order: -1; 
+    }
+}
+
+
