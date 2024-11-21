@@ -173,7 +173,7 @@ export const updateFollow = async (params) => {
   }
 };
 
-export const getAllFollowersAndFollowings = async (id) => {
+export const getAllFollowersAndFollowingsInfo = async (id) => {
   try {
     const followers = await db.follow.findMany({
       where: {
