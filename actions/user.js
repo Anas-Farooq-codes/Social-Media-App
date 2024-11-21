@@ -251,3 +251,5 @@ export const updateBanner = async (params) => {
       throw e;
     }
   };
+
+  
