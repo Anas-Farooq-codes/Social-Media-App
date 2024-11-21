@@ -1,81 +1,87 @@
-import { createUser } from "@/actions/user";
+import { createUser, deleteUser, updateUser } from "@/actions/user";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 
 export async function POST(req) {
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-    if(!WEBHOOK_SECRET) {
-        throw new Error(
-            "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
-        );
-    }
+  if (!WEBHOOK_SECRET) {
+    throw new Error(
+      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
+    );
+  }
 
-    // Set The Headers 
+  // Get the headers
+  const headerPayload = headers();
+  const svix_id = headerPayload.get("svix-id");
+  const svix_timestamp = headerPayload.get("svix-timestamp");
+  const svix_signature = headerPayload.get("svix-signature");
 
-const headerPayload = headers();
-const svix_id = headerPayload.get("svix-id");
-const svix_timestamp = headerPayload.get("svix-timestamp");
-const svix_signature = headerPayload.get("svix-signature");
+  // If there are no headers, error out
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    return new Response("Error occured -- no svix headers", {
+      status: 400,
+    });
+  }
 
-// If there are no headers, error out 
+  // Get the body
+  const payload = await req.json();
+  const body = JSON.stringify(payload);
 
-if(!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Missing headers", {status: 400 });
-}
+  // Create a new Svix instance with your secret.
+  const wh = new Webhook(WEBHOOK_SECRET);
 
-// get the raw body 
+  let evt;
 
-const payload = await req.json();
-const body = JSON.stringify(payload);
-
-// Create a new Svix instance 
-
-const wh = new Webhook(WEBHOOK_SECRET)
-
-let evt;
-
-try {
-
+  // Verify the payload with the headers
+  try {
     evt = wh.verify(body, {
-"svix-id": svix_id,
-"svix-timestamp": svix_timestamp,
-"svix-signature":svix_signature ,
-    })
-}catch(err)
-{
-    console.log("Error while verifying the webhooks", err);
-    return new Response("Error while verifying the webhook", {status: 400});
-    
-}
+      "svix-id": svix_id,
+      "svix-timestamp": svix_timestamp,
+      "svix-signature": svix_signature,
+    });
+  } catch (err) {
+    console.error("Error verifying webhook:", err);
+    return new Response("Error occured", {
+      status: 400,
+    });
+  }
 
-const eventType = evt.type
+  // Get the ID and type
+  const eventType = evt.type;
 
-console.log(`Received ${eventType} event`);
+  const { id, first_name, last_name, email_addresses, image_url, username } = evt.data;
 
+  const email_address = email_addresses?.[0].email_address;
 
-
-if (eventType === "user.created") {
-
-    const {id, first_name, last_name, email_addresses, image_url, username} = evt.data
-
-const email_address = email_addresses[0].email_address
-
+  console.log("event received")
+  if (eventType === "user.created") {
     try {
-
-        await createUser({id, first_name, last_name, email_address, image_url, username})
-    }catch(e)
-    {
-        throw new Error("Failed to save in db")
+      await createUser({ id, first_name, last_name, email_address, image_url, username });
+    } catch {
+      throw new Error("Failed to save new user in db");
     }
-    
-}
+  }
 
-return Response.json({ message: "received" });
+  if (eventType === "user.updated") {
+    try {
+      await updateUser({ id, first_name, last_name, email_address, image_url, username });
+    } catch {
+      throw new Error("Failed to update user in db");
+    }
+  }
 
+  if(eventType === "user.deleted") {
+    try {
+      await deleteUser({ id });
+    } catch {
+      throw new Error("Failed to delete user in db");
+    }
+  }
 
+  return Response.json({ message: "received" });
 }
 
 export async function GET() {
-    return Response.json({ message: "Hello World!" })
+  return Response.json({ message: "Hello World!" });
 }
